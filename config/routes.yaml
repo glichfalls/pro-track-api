@@ -1,0 +1,79 @@
+get_projects:
+    path: /api/v1/projects
+    controller: App\Controller\ProjectController::getProjects
+    methods: GET|HEAD
+
+get_project_by_id:
+    path: /api/v1/project/{id}
+    controller: App\Controller\ProjectController::getProjectById
+    methods: GET|HEAD
+
+create_project:
+    path: /api/v1/projects
+    controller: App\Controller\ProjectController:createProject
+    methods: POST|HEAD
+
+update_project:
+    path: /api/v1/project/{id}
+    controller: App\Controller\ProjectController::updateProject
+    methods: POST|HEAD
+
+delete_project:
+    path: /api/v1/project/{id}
+    controller: App\Controller\ProjectController::deleteProject
+    methods: POST|HEAD
+
+get_tasks:
+    path: /api/v1/tasks
+    controller: App\Controller\TaskController:getTasks
+    methods: GET|HEAD
+
+get_tasks_by_project:
+    path: /api/v1/project/{id}/tasks
+    controller: App\Controller\TaskController:getTasksByProject
+    methods: GET|HEAD
+
+get_task_by_id:
+    path: /api/v1/task/{id}
+    controller: App\Controller\TaskController:getTaskById
+    methods: GET|HEAD
+
+create_task:
+    path: /api/v1/project/{id}/tasks
+    controller: App\Controller\TaskController:createTask
+    methods: POST|HEAD
+
+update_task:
+    path: /api/v1/task/{id}
+    controller: App\Controller\TaskController:updateTask
+    methods: POST|HEAD
+
+delete_task:
+    path: /api/v1/task/{id}
+    controller: App\Controller\TaskController::deleteTask
+    methods: POST|HEAD
+
+get_record_by_id:
+    path: /api/v1/record/{id}
+    controller: App\Controller\TimeRecordController::getRecordById
+    methods: GET|HEAD
+
+get_records_by_task:
+    path: /api/v1/task/{id}/records
+    controller: App\Controller\TimeRecordController::getRecordsByTask
+    methods: GET|HEAD
+
+create_time_record:
+    path: /api/v1/task/{id}/records
+    controller: App\Controller\TimeRecordController:createRecord
+    methods: POST|HEAD
+
+update_time_record:
+    path: /api/v1/record/{id}
+    controller: App\Controller\TimeRecordController::updateRecord
+    methods: POST|HEAD
+
+delete_time_record:
+    path: /api/v1/record/{id}
+    controller: App\Controller\TimeRecordController::deleteRecord
+    methods: POST|HEAD
