@@ -10,8 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=TaskRepository::class)
  */
-class Task
+class Task implements \JsonSerializable
 {
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -150,4 +151,16 @@ class Task
 
         return $this;
     }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'description' => $this->getDescription(),
+            'users' => $this->getUsers()->toArray(),
+            'records' => $this->getTimeRecords()->toArray()
+        ];
+    }
+
 }

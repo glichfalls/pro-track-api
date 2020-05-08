@@ -65,7 +65,7 @@ class ProjectController extends BaseController
             ->find($id);
         
         if(!$project) {
-            return $this->json(404, sprintf('Es existiert kein Projekt mit der ID %s', $id));
+            return $this->getJsonResponse(404, sprintf('Es existiert kein Projekt mit der ID %s', $id));
         }
         
         $project->withRequestValues($request->request);
@@ -76,18 +76,30 @@ class ProjectController extends BaseController
             return $this->getJsonResponse(400, $errors->get(0)->getMessage());
         }
         
-        $manager = $this->getDoctrine()->getManager();
-        
-        $manager->flush();
+        $this->getDoctrine()->getManager()->flush();
         
         return $this->getJsonResponse(200, 'Das Projekt wurde erfolgreich aktualisiert', $project);
         
     }
     
-    public function deleteProject() : Response
+    public function deleteProject(int $id) : Response
     {
-    
-    
+
+        $project = $this->getDoctrine()
+            ->getRepository(Project::class)
+            ->find($id);
+
+        if(!$project) {
+            return $this->getJsonResponse(404, sprintf('Es existiert kein Projekt mit der ID %s', $id));
+        }
+
+        $manager = $this->getDoctrine()->getManager();
+
+        $manager->remove($project);
+
+        $manager->flush();
+
+        return $this->getJsonResponse(200, sprintf('Das Projekt `%s` wurde erfolreich gelöscht.', $project->getName()));
     
     }
     
