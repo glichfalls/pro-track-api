@@ -1,8 +1,15 @@
 {
+    "name": "glichfalls/pro-track",
+    "authors": [
+        {
+            "name": "Robin Portner",
+            "role": "developer"
+        }
+    ],
     "type": "project",
     "license": "proprietary",
     "require": {
-        "php": "^7.2.5",
+        "php": "^7.4",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-json": "*",
@@ -11,6 +18,8 @@
         "symfony/flex": "^1.3.1",
         "symfony/framework-bundle": "5.0.*",
         "symfony/orm-pack": "^1.0",
+        "symfony/property-access": "5.0.*",
+        "symfony/serializer": "5.0.*",
         "symfony/validator": "5.0.*",
         "symfony/yaml": "5.0.*"
     },

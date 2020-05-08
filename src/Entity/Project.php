@@ -12,9 +12,9 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 /**
- * @ORM\Entity(repositoryClass=ProjectRepository::class)
+ * @ORM\Entity(repositoryClass=App\Repository\ProjectRepository::class)
  */
-class Project implements \JsonSerializable
+class Project implements EntityInterface, Validatable
 {
     /**
      * @ORM\Id()
@@ -57,7 +57,7 @@ class Project implements \JsonSerializable
         return $project;
     }
     
-    public function withRequestValues(ParameterBag $input) : Project
+    public function applyRequestValues(ParameterBag $input) : Project
     {
         $this->name = $input->get('name');
         $this->description = $input->get('description');
@@ -91,15 +91,6 @@ class Project implements \JsonSerializable
         $this->description = $description;
 
         return $this;
-    }
-    
-    public function jsonSerialize()
-    {
-        return [
-            'id' => $this->getId(),
-            'name' => $this->getName(),
-            'description' => $this->getDescription()
-        ];
     }
 
     /**
@@ -161,7 +152,18 @@ class Project implements \JsonSerializable
         return $this;
     }
     
-    public static function loadValidatorMetadata(ClassMetadata $metadata)
+    public function toArray() : array
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'description' => $this->getDescription(),
+            'tasks' => $this->getTasks()->toArray(),
+            'users' => $this->getUsers()->toArray()
+        ];
+    }
+    
+    public static function loadValidatorMetadata(ClassMetadata $metadata) : void
     {
         $metadata->addPropertyConstraints('name', [
             new NotBlank([

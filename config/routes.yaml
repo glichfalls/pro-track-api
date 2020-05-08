@@ -16,12 +16,12 @@ create_project:
 update_project:
     path: /api/v1/project/{id}
     controller: App\Controller\ProjectController::updateProject
-    methods: POST|HEAD
+    methods: PUT|HEAD
 
 delete_project:
     path: /api/v1/project/{id}
     controller: App\Controller\ProjectController::deleteProject
-    methods: POST|HEAD
+    methods: DELETE|HEAD
 
 get_tasks:
     path: /api/v1/tasks
