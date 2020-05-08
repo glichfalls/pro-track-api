@@ -6,11 +6,15 @@ use App\Repository\TaskRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 /**
  * @ORM\Entity(repositoryClass=TaskRepository::class)
  */
-class Task implements \JsonSerializable
+class Task implements EntityInterface, Validatable
 {
 
     /**
@@ -51,7 +55,20 @@ class Task implements \JsonSerializable
         $this->timeRecords = new ArrayCollection();
         $this->users = new ArrayCollection();
     }
-
+    
+    public static function fromRequestValues(ParameterBag $input) : Task
+    {
+        $task = new self();
+        return $task->applyRequestValues($input);
+    }
+    
+    public function applyRequestValues(ParameterBag $input) : Task
+    {
+        $this->title = $input->get('title');
+        $this->description = $input->get('description');
+        return $this;
+    }
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -152,7 +169,7 @@ class Task implements \JsonSerializable
         return $this;
     }
 
-    public function jsonSerialize()
+    public function toArray() : array
     {
         return [
             'id' => $this->getId(),
@@ -162,5 +179,20 @@ class Task implements \JsonSerializable
             'records' => $this->getTimeRecords()->toArray()
         ];
     }
-
+    
+    public static function loadValidatorMetadata(ClassMetadata $metadata) : void
+    {
+        $metadata->addPropertyConstraints('title', [
+            new NotBlank([
+                'message' => 'Der Arbeitspaket Titel darf nicht leer sein.'
+            ]),
+            new Length([
+                'min' => 3,
+                'max' => 255,
+                'maxMessage' => 'Der Arbeitspaket Name {{ value }} ist zu lang. Er darf maximal {{ limit }} Zeichen enthalten.',
+                'minMessage' => 'Der Arbeitspaket Name {{ value }} ist zu kurz. Er muss mindestens {{ limit }} Zeichen enthalten.'
+            ])
+        ]);
+    }
+    
 }

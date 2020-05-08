@@ -28,11 +28,6 @@ get_tasks:
     controller: App\Controller\TaskController:getTasks
     methods: GET|HEAD
 
-get_tasks_by_project:
-    path: /api/v1/project/{id}/tasks
-    controller: App\Controller\TaskController:getTasksByProject
-    methods: GET|HEAD
-
 get_task_by_id:
     path: /api/v1/task/{id}
     controller: App\Controller\TaskController:getTaskById
@@ -46,12 +41,12 @@ create_task:
 update_task:
     path: /api/v1/task/{id}
     controller: App\Controller\TaskController:updateTask
-    methods: POST|HEAD
+    methods: PUT|HEAD
 
 delete_task:
     path: /api/v1/task/{id}
     controller: App\Controller\TaskController::deleteTask
-    methods: POST|HEAD
+    methods: DELETE|HEAD
 
 get_record_by_id:
     path: /api/v1/record/{id}
