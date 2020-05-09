@@ -12,7 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class TimeRecordController extends AbstractController
+class TimeRecordController extends BaseController
 {
     
     public function getRecordById(int $id, TimeRecordService $service) : Response
@@ -24,10 +24,15 @@ class TimeRecordController extends AbstractController
         }
     }
     
-    public function createRecord(Request $request, TimeRecordService $service, TaskService $taskService) : Response
+    public function createRecord(int $id, Request $request, TimeRecordService $service, TaskService $taskService) : Response
     {
         try {
-            $record = $service->createTimeRecordFromRequest($taskService, $request);
+            $record = $service->createTimeRecordFromRequest(
+                $this->getAuthenticatedUser($request),
+                $id,
+                $taskService,
+                $request
+            );
         } catch(HTTPException $exception) {
             return $exception->getJsonResponse();
         }

@@ -4,7 +4,9 @@ namespace App\Service;
 
 
 use App\Entity\TimeRecord;
+use App\Entity\User;
 use App\Exceptions\BadRequestException;
+use App\Exceptions\ForbiddenException;
 use App\Exceptions\NotFoundException;
 use App\Factory\AbstractService;
 use App\Repository\TimeRecordRepository;
@@ -38,6 +40,8 @@ class TimeRecordService extends AbstractService
     }
     
     /**
+     * @param User        $user
+     * @param int         $taskId
      * @param TaskService $taskService
      * @param Request     $request
      *
@@ -45,12 +49,17 @@ class TimeRecordService extends AbstractService
      * @throws BadRequestException
      * @throws NotFoundException
      */
-    public function createTimeRecordFromRequest(TaskService $taskService, Request $request) : TimeRecord
+    public function createTimeRecordFromRequest(
+        User $user,
+        int $taskId,
+        TaskService $taskService,
+        Request $request
+    ) : TimeRecord
     {
         $record = TimeRecord::fromRequestValues($request->request);
-        $record->setTask($taskService->getTaskById($request->request->get('task')));
+        $record->setTask($taskService->getTaskById($taskId));
         $this->validateEntity($record);
-        return $record;
+        return $record->setUser($user);
     }
     
     /**

@@ -18,6 +18,11 @@ update_project:
     controller: App\Controller\ProjectController::updateProject
     methods: PUT|HEAD
 
+change_project_status:
+    path: /api/v1/project/{id}/status
+    controller: App\Controller\ProjectController:changeProjectStatus
+    methods: PATCH|HEAD
+
 delete_project:
     path: /api/v1/project/{id}
     controller: App\Controller\ProjectController::deleteProject
@@ -68,6 +73,11 @@ delete_time_record:
     controller: App\Controller\TimeRecordController::deleteRecord
     methods: DELETE|HEAD
 
+authenticate:
+    path: /api/v1/authenticate
+    controller: App\Controller\UserController:authenticate
+    methods: POST|HEAD
+
 get_users:
     path: /api/v1/users
     controller: App\Controller\UserController::getUsers
@@ -77,3 +87,8 @@ get_user_by_id:
     path: /api/v1/user/{id}
     controller: App\Controller\UserController:getUserById
     methods: GET|HEAD
+
+create_user:
+    path: /api/v1/users
+    controller: App\Controller\UserController:createUser
+    methods: POST|HEAD

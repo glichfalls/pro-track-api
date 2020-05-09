@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\Validator\Constraints\GreaterThan;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
@@ -17,6 +18,9 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
 class Task implements EntityInterface, Validatable
 {
 
+    public const STATUS_OPEN = 1;
+    public const STATUS_FINISHED = 2;
+    
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -50,6 +54,16 @@ class Task implements EntityInterface, Validatable
      */
     private $users;
 
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $status;
+
+    /**
+     * @ORM\Column(type="bigint")
+     */
+    private $guideTime;
+
     public function __construct()
     {
         $this->timeRecords = new ArrayCollection();
@@ -59,13 +73,15 @@ class Task implements EntityInterface, Validatable
     public static function fromRequestValues(ParameterBag $input) : Task
     {
         $task = new self();
+        $task->setStatus(self::STATUS_OPEN);
         return $task->applyRequestValues($input);
     }
     
     public function applyRequestValues(ParameterBag $input) : Task
     {
-        $this->title = $input->get('title');
-        $this->description = $input->get('description');
+        $this->setTitle($input->get('title'));
+        $this->setDescription($input->get('description'));
+        $this->setGuideTime($input->get('guide_time'));
         return $this;
     }
     
@@ -168,6 +184,30 @@ class Task implements EntityInterface, Validatable
 
         return $this;
     }
+
+    public function getStatus(): ?int
+    {
+        return $this->status;
+    }
+
+    public function setStatus(int $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getGuideTime(): ?string
+    {
+        return $this->guideTime;
+    }
+
+    public function setGuideTime(string $guideTime): self
+    {
+        $this->guideTime = $guideTime;
+
+        return $this;
+    }
     
     public static function loadValidatorMetadata(ClassMetadata $metadata) : void
     {
@@ -180,6 +220,15 @@ class Task implements EntityInterface, Validatable
                 'max' => 255,
                 'maxMessage' => 'Der Arbeitspaket Name {{ value }} ist zu lang. Er darf maximal {{ limit }} Zeichen enthalten.',
                 'minMessage' => 'Der Arbeitspaket Name {{ value }} ist zu kurz. Er muss mindestens {{ limit }} Zeichen enthalten.'
+            ])
+        ]);
+        $metadata->addPropertyConstraints('guideTime', [
+            new NotBlank([
+                'message' => 'Die Richtzeit darf nicht leer sein.'
+            ]),
+            new GreaterThan([
+                'value' => 1,
+                'message' => 'Die Richtzeit muss grösser als 0 sein.'
             ])
         ]);
     }

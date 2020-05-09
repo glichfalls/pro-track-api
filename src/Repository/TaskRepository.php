@@ -27,7 +27,7 @@ class TaskRepository extends ServiceEntityRepository
     public function findByTitle(string $title) : array
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.name = :name')
+            ->andWhere('p.title = :title')
             ->setParameter('title', $title)
             ->getQuery()
             ->getResult();

@@ -49,9 +49,7 @@ class TimeRecord implements EntityInterface, Validatable
         return $this->id;
     }
     
-    public static function fromRequestValues(
-        ParameterBag $input
-    ) : TimeRecord
+    public static function fromRequestValues(ParameterBag $input) : TimeRecord
     {
         $record = new self();
         return $record->applyRequestValues($input);

@@ -39,6 +39,7 @@ class TaskService extends AbstractService
     }
     
     /**
+     * @param int            $projectId
      * @param ProjectService $projectService
      * @param Request        $request
      *
@@ -47,15 +48,24 @@ class TaskService extends AbstractService
      * @throws ConflictException
      * @throws NotFoundException
      */
-    public function createTaskFromRequest(ProjectService $projectService, Request $request) : Task
+    public function createTaskFromRequest(int $projectId, ProjectService $projectService, Request $request) : Task
     {
+
         $task = Task::fromRequestValues($request->request);
         $this->validateEntity($task);
-        $task->setProject($projectService->getProjectById($request->request->get('project')));
-        if($task->getProject()->getTasks()->exists(fn(Task $cmp) => strcmp($cmp->getTitle(), $task->getTitle()))) {
-            throw new ConflictException(sprintf('Es existiert bereits ein Arbeitspaket mit dem Namen %s.', $task->getTitle()));
+        $project = $projectService->getProjectById($projectId);
+        if(!$project) {
+            throw new BadRequestException(
+                'Es wurde kein Projekt ausgewählt. Das Arbeitspaket kann nicht erstellt werden.'
+            );
         }
-        return $task;
+        if($project->getTasks()->exists(fn(Task $cmp) => strcmp($cmp->getTitle(), $task->getTitle()))) {
+            throw new ConflictException(sprintf(
+                'Es existiert bereits ein Arbeitspaket mit dem Namen %s.',
+                $task->getTitle()
+            ));
+        }
+        return $task->setProject($project);
     }
     
     /**
@@ -72,6 +82,25 @@ class TaskService extends AbstractService
         $task->applyRequestValues($request->request);
         $this->validateEntity($task);
         return $task;
+    }
+    
+    /**
+     * @param Task $task
+     * @param Request $request
+     *
+     * @return Task
+     * @throws BadRequestException
+     */
+    public function patchTaskStatusFromRequest(Task $task, Request $request) : Task
+    {
+        $status = $request->request->get('status');
+        if(!$status) {
+            throw new BadRequestException('Es wurde kein Status angegeben.');
+        }
+        if(!in_array($status, [Task::STATUS_OPEN, Task::STATUS_FINISHED])) {
+            throw new BadRequestException(sprintf('Es existiert kein Status mit dem code %s.', $status));
+        }
+        return $task->setStatus($status);
     }
     
 }

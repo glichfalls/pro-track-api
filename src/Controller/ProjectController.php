@@ -6,13 +6,12 @@ use App\Entity\Project;
 use App\Exceptions\HTTPException;
 use App\Factory\ResponseFactory;
 use App\Service\ProjectService;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class ProjectController extends AbstractController
+class ProjectController extends BaseController
 {
-
+    
     public function getProjects() : Response
     {
         $projects = $this->getDoctrine()
@@ -68,6 +67,31 @@ class ProjectController extends AbstractController
             $manager->remove($project);
             $manager->flush();
             return ResponseFactory::createSuccessResponse(sprintf('Das Projekt %s wurde gelöscht.', $project->getName()));
+        } catch(HTTPException $exception) {
+            return $exception->getJsonResponse();
+        }
+    }
+    
+    public function changeProjectStatus(Request $request, int $id, ProjectService $service) : Response
+    {
+        try {
+            $project = $service->getProjectById($id);
+            $project = $service->patchProjectStatusFromRequest($project, $request);
+            $this->getDoctrine()->getManager()->flush();
+            switch($project->getStatus()) {
+                case Project::STATUS_OPEN:
+                    return ResponseFactory::createSuccessResponse(
+                        sprintf('Das Projekt %s wurde neu eröffnet.', $project->getName()),
+                        $project
+                    );
+                case Project::STATUS_FINISHED:
+                    return ResponseFactory::createSuccessResponse(
+                        sprintf('Das Projekt %s wurde beendet.', $project->getName()),
+                        $project
+                    );
+                default:
+                    return ResponseFactory::createServerErrorResponse('Es ist ein Fehler beim ändern des Status aufgetreten.');
+            }
         } catch(HTTPException $exception) {
             return $exception->getJsonResponse();
         }

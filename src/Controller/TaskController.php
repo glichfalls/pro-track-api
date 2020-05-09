@@ -32,10 +32,10 @@ class TaskController extends BaseController
         }
     }
     
-    public function createTask(Request $request, TaskService $service, ProjectService $projectService) : Response
+    public function createTask(int $id, Request $request, TaskService $service, ProjectService $projectService) : Response
     {
         try {
-            $task = $service->createTaskFromRequest($projectService, $request);
+            $task = $service->createTaskFromRequest($id, $projectService, $request);
         } catch(HTTPException $exception) {
             return $exception->getJsonResponse();
         }
@@ -74,5 +74,30 @@ class TaskController extends BaseController
             return $exception->getJsonResponse();
         }
     }
-
+    
+    public function changeTaskStatus(Request $request, int $id, TaskService $service) : Response
+    {
+        try {
+            $task = $service->getTaskById($id);
+            $task = $service->patchTaskStatusFromRequest($task, $request);
+            $this->getDoctrine()->getManager()->flush();
+            switch($task->getStatus()) {
+                case Task::STATUS_OPEN:
+                    return ResponseFactory::createSuccessResponse(
+                        sprintf('Das Arbeitspaket %s wurde neu eröffnet.', $task->getTitle()),
+                        $task
+                    );
+                case Task::STATUS_FINISHED:
+                    return ResponseFactory::createSuccessResponse(
+                        sprintf('Das Arbeitspaket %s wurde beendet.', $task->getTitle()),
+                        $task
+                    );
+                default:
+                    return ResponseFactory::createServerErrorResponse('Es ist ein Fehler beim ändern des Status aufgetreten.');
+            }
+        } catch(HTTPException $exception) {
+            return $exception->getJsonResponse();
+        }
+    }
+    
 }

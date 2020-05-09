@@ -38,4 +38,14 @@ final class ResponseFactory
             : self::createJsonResponse(200, $message, $payload);
     }
     
+    /**
+     * @param string $message
+     *
+     * @return Response
+     */
+    public static function createServerErrorResponse(string $message) : Response
+    {
+        return self::createJsonResponse(500, $message);
+    }
+    
 }

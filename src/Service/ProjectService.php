@@ -73,4 +73,23 @@ class ProjectService extends AbstractService
         return $project;
     }
     
+    /**
+     * @param Project $project
+     * @param Request $request
+     *
+     * @return Project
+     * @throws BadRequestException
+     */
+    public function patchProjectStatusFromRequest(Project $project, Request $request) : Project
+    {
+        $status = $request->request->get('status');
+         if(!$status) {
+             throw new BadRequestException('Es wurde kein Status angegeben.');
+         }
+         if(!in_array($status, [Project::STATUS_OPEN, Project::STATUS_FINISHED])) {
+             throw new BadRequestException(sprintf('Es existiert kein Status mit dem code %s.', $status));
+         }
+         return $project->setStatus($status);
+    }
+    
 }

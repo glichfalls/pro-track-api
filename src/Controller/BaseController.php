@@ -1,30 +1,34 @@
 <?php
 
-
 namespace App\Controller;
 
 
-use JsonSerializable;
+use App\Entity\User;
+use App\Exceptions\NotFoundException;
+use App\Service\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 
 abstract class BaseController extends AbstractController
 {
     
-    /**
-     * @param int                                $status
-     * @param string                             $message
-     * @param array|string|JsonSerializable|null $payload
-     *
-     * @return Response
-     */
-    protected function getJsonResponse(int $status, string $message = '', $payload = null) : Response
+    private ?User $user = null;
+    protected UserService $userService;
+    
+    public function __construct(UserService $service)
     {
-        return $this->json([
-            'status' => $status,
-            'message' => $message,
-            'payload' => $payload
-        ], $status);
+        $this->userService = $service;
+    }
+    
+    /**
+     * @param Request $request
+     *
+     * @return User
+     * @throws NotFoundException
+     */
+    public function getAuthenticatedUser(Request $request) : User
+    {
+        return $this->user ?: $this->userService->getUserById($request->request->get('user'));
     }
     
 }

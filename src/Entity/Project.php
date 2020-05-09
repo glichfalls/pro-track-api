@@ -16,6 +16,10 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  */
 class Project implements EntityInterface, Validatable
 {
+    
+    public const STATUS_OPEN = 1;
+    public const STATUS_FINISHED = 2;
+    
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -27,7 +31,12 @@ class Project implements EntityInterface, Validatable
      * @ORM\Column(type="string", length=255)
      */
     private $name;
-
+    
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $status;
+    
     /**
      * @ORM\Column(type="text", nullable=true)
      */
@@ -52,15 +61,13 @@ class Project implements EntityInterface, Validatable
     public static function fromRequestValues(ParameterBag $input) : Project
     {
         $project = new self();
-        $project->name = $input->get('name');
-        $project->description = $input->get('description');
-        return $project;
+        return $project->applyRequestValues($input);
     }
     
     public function applyRequestValues(ParameterBag $input) : Project
     {
-        $this->name = $input->get('name');
-        $this->description = $input->get('description');
+        $this->setName($input->get('name'));
+        $this->setDescription($input->get('description'));
         return $this;
     }
     
@@ -148,6 +155,18 @@ class Project implements EntityInterface, Validatable
             $this->users->removeElement($user);
             $user->removeProject($this);
         }
+
+        return $this;
+    }
+
+    public function getStatus(): ?int
+    {
+        return $this->status;
+    }
+
+    public function setStatus(int $status): self
+    {
+        $this->status = $status;
 
         return $this;
     }
