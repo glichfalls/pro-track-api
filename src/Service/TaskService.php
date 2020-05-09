@@ -31,24 +31,27 @@ class TaskService extends AbstractService
      */
     public function getTaskById(int $id) : Task
     {
-        $project = $this->taskRepository->find($id);
-        if(!$project) {
+        $task = $this->taskRepository->find($id);
+        if(!$task) {
             throw new NotFoundException(sprintf('Es existiert kein Arbeitspaket mit der ID %s', $id));
         }
-        return $project;
+        return $task;
     }
     
     /**
-     * @param Request $request
+     * @param ProjectService $projectService
+     * @param Request        $request
      *
      * @return Task
      * @throws BadRequestException
      * @throws ConflictException
+     * @throws NotFoundException
      */
-    public function createTaskFromRequest(Request $request) : Task
+    public function createTaskFromRequest(ProjectService $projectService, Request $request) : Task
     {
         $task = Task::fromRequestValues($request->request);
         $this->validateEntity($task);
+        $task->setProject($projectService->getProjectById($request->request->get('project')));
         if($task->getProject()->getTasks()->exists(fn(Task $cmp) => strcmp($cmp->getTitle(), $task->getTitle()))) {
             throw new ConflictException(sprintf('Es existiert bereits ein Arbeitspaket mit dem Namen %s.', $task->getTitle()));
         }

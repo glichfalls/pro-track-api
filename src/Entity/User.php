@@ -6,11 +6,12 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  */
-class User
+class User implements EntityInterface
 {
     /**
      * @ORM\Id()
@@ -44,7 +45,20 @@ class User
         $this->projects = new ArrayCollection();
         $this->tasks = new ArrayCollection();
     }
-
+    
+    public static function fromRequestValues(ParameterBag $input) : EntityInterface
+    {
+        $user = new self();
+        return $user->applyRequestValues($input);
+    }
+    
+    public function applyRequestValues(ParameterBag $input) : EntityInterface
+    {
+        $this->setName($input->get('name'));
+        $this->setPassword($input->get('password'));
+        return $this;
+    }
+    
     public function getId(): ?int
     {
         return $this->id;

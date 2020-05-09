@@ -4,11 +4,16 @@ namespace App\Entity;
 
 use App\Repository\TimeRecordRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\Validator\Constraints\GreaterThan;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Positive;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 /**
  * @ORM\Entity(repositoryClass=TimeRecordRepository::class)
  */
-class TimeRecord
+class TimeRecord implements EntityInterface, Validatable
 {
     /**
      * @ORM\Id()
@@ -43,7 +48,22 @@ class TimeRecord
     {
         return $this->id;
     }
-
+    
+    public static function fromRequestValues(
+        ParameterBag $input
+    ) : TimeRecord
+    {
+        $record = new self();
+        return $record->applyRequestValues($input);
+    }
+    
+    public function applyRequestValues(ParameterBag $input) : TimeRecord
+    {
+        $this->setDescription($input->get('description'));
+        $this->setTime($input->get('time'));
+        return $this;
+    }
+    
     public function getDescription(): ?string
     {
         return $this->description;
@@ -91,4 +111,26 @@ class TimeRecord
 
         return $this;
     }
+    
+    public static function loadValidatorMetadata(ClassMetadata $metadata) : void
+    {
+        $metadata->addPropertyConstraints('description', [
+            new NotBlank([
+                'message' => 'Die Zeiterfassungs Beschreibung darf nicht leer sein.'
+            ]),
+        ]);
+        $metadata->addPropertyConstraints('time', [
+            new NotBlank([
+                'message' => 'Die erfasste Zeit darf nicht leer sein.'
+            ]),
+            new Positive([
+                'message' => 'Die erfasste Zeit muss eine Positive Zahl sein.'
+            ]),
+            new GreaterThan([
+                'message' => 'Die erfasste Zeit muss grösser als 0 sein.',
+                'value' => 1
+            ])
+        ]);
+    }
+    
 }

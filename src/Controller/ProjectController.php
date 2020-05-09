@@ -24,7 +24,7 @@ class ProjectController extends AbstractController
     public function getProjectById(int $id, ProjectService $service) : Response
     {
         try {
-            return ResponseFactory::createJsonResponse(200, '', $service->getProjectById($id)->toArray());
+            return ResponseFactory::createJsonResponse(200, '', $service->getProjectById($id));
         } catch(HTTPException $exception) {
             return $exception->getJsonResponse();
         }
@@ -42,7 +42,7 @@ class ProjectController extends AbstractController
         $manager->flush();
         return ResponseFactory::createSuccessResponse(
             sprintf('Das Projekt %s wurde erstellt.', $project->getName()),
-            $project->toArray()
+            $project
         );
     }
     
@@ -56,7 +56,7 @@ class ProjectController extends AbstractController
         $this->getDoctrine()->getManager()->flush();
         return ResponseFactory::createSuccessResponse(
             'Das Projekt wurde erfolgreich aktualisiert.',
-            $project->toArray()
+            $project
         );
     }
     

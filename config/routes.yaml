@@ -53,11 +53,6 @@ get_record_by_id:
     controller: App\Controller\TimeRecordController::getRecordById
     methods: GET|HEAD
 
-get_records_by_task:
-    path: /api/v1/task/{id}/records
-    controller: App\Controller\TimeRecordController::getRecordsByTask
-    methods: GET|HEAD
-
 create_time_record:
     path: /api/v1/task/{id}/records
     controller: App\Controller\TimeRecordController:createRecord
@@ -66,9 +61,19 @@ create_time_record:
 update_time_record:
     path: /api/v1/record/{id}
     controller: App\Controller\TimeRecordController::updateRecord
-    methods: POST|HEAD
+    methods: PUT|HEAD
 
 delete_time_record:
     path: /api/v1/record/{id}
     controller: App\Controller\TimeRecordController::deleteRecord
-    methods: POST|HEAD
+    methods: DELETE|HEAD
+
+get_users:
+    path: /api/v1/users
+    controller: App\Controller\UserController::getUsers
+    methods: GET|HEAD
+
+get_user_by_id:
+    path: /api/v1/user/{id}
+    controller: App\Controller\UserController:getUserById
+    methods: GET|HEAD

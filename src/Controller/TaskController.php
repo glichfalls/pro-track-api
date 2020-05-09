@@ -32,10 +32,10 @@ class TaskController extends BaseController
         }
     }
     
-    public function createTask(Request $request, TaskService $service) : Response
+    public function createTask(Request $request, TaskService $service, ProjectService $projectService) : Response
     {
         try {
-            $task = $service->createTaskFromRequest($request);
+            $task = $service->createTaskFromRequest($projectService, $request);
         } catch(HTTPException $exception) {
             return $exception->getJsonResponse();
         }
@@ -44,7 +44,7 @@ class TaskController extends BaseController
         $manager->flush();
         return ResponseFactory::createSuccessResponse(
             sprintf('Das Arbeitspaket %s wurde erstellt.', $task->getTitle()),
-            $task->toArray()
+            $task
         );
     }
     
@@ -58,7 +58,7 @@ class TaskController extends BaseController
         $this->getDoctrine()->getManager()->flush();
         return ResponseFactory::createSuccessResponse(
             'Das Arbeitspaket wurde erfolgreich aktualisiert.',
-            $task->toArray()
+            $task
         );
     }
     
@@ -69,7 +69,7 @@ class TaskController extends BaseController
             $manager = $this->getDoctrine()->getManager();
             $manager->remove($task);
             $manager->flush();
-            return ResponseFactory::createSuccessResponse(sprintf('Das Arbeitspaket %s wurde gelöscht.', $task->getName()));
+            return ResponseFactory::createSuccessResponse(sprintf('Das Arbeitspaket %s wurde gelöscht.', $task->getTitle()));
         } catch(HTTPException $exception) {
             return $exception->getJsonResponse();
         }

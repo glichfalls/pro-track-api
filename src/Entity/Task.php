@@ -168,17 +168,6 @@ class Task implements EntityInterface, Validatable
 
         return $this;
     }
-
-    public function toArray() : array
-    {
-        return [
-            'id' => $this->getId(),
-            'title' => $this->getTitle(),
-            'description' => $this->getDescription(),
-            'users' => $this->getUsers()->toArray(),
-            'records' => $this->getTimeRecords()->toArray()
-        ];
-    }
     
     public static function loadValidatorMetadata(ClassMetadata $metadata) : void
     {
