@@ -37,15 +37,16 @@ final class ResponseFactory
             ? Response::create(null, 204)
             : self::createJsonResponse(200, $message, $payload);
     }
-    
+
     /**
      * @param string $message
      *
+     * @param array|null $payload
      * @return Response
      */
-    public static function createServerErrorResponse(string $message) : Response
+    public static function createServerErrorResponse(string $message, array $payload = null) : Response
     {
-        return self::createJsonResponse(500, $message);
+        return self::createJsonResponse(500, $message, $payload);
     }
     
 }

@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\TimeRecordRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\GreaterThan;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Positive;
@@ -44,6 +45,11 @@ class TimeRecord implements EntityInterface, Validatable
      */
     private $user;
 
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $date;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -57,8 +63,15 @@ class TimeRecord implements EntityInterface, Validatable
     
     public function applyRequestValues(ParameterBag $input) : TimeRecord
     {
-        $this->setDescription($input->get('description'));
-        $this->setTime($input->get('time'));
+        if($input->has('description')) {
+            $this->setDescription((string) $input->get('description'));
+        }
+        if($input->has('date')) {
+            $this->setDate(\DateTime::createFromFormat('d.m.Y', $input->get('date')));
+        }
+        if($input->has('time')) {
+            $this->setTime((string) $input->get('time'));
+        }
         return $this;
     }
     
@@ -106,6 +119,18 @@ class TimeRecord implements EntityInterface, Validatable
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getDate(): ?\DateTimeInterface
+    {
+        return $this->date;
+    }
+
+    public function setDate(\DateTimeInterface $date): self
+    {
+        $this->date = $date;
 
         return $this;
     }

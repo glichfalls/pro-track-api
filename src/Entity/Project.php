@@ -61,6 +61,7 @@ class Project implements EntityInterface, Validatable
     public static function fromRequestValues(ParameterBag $input) : Project
     {
         $project = new self();
+        $project->setStatus(self::STATUS_OPEN);
         return $project->applyRequestValues($input);
     }
     
