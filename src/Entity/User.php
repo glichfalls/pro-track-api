@@ -224,4 +224,13 @@ class User implements EntityInterface, Validatable
         ]);
     }
     
+    public function toArray() : array
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'role' => $this->getRole()
+        ];
+    }
+    
 }

@@ -3,6 +3,7 @@
 namespace App\Factory;
 
 
+use App\Utility\Serializer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -20,12 +21,11 @@ final class ResponseFactory
         array $headers = []
     ) : JsonResponse
     {
-        return JsonResponse::create(null, $status, $headers)
-            ->setJson(SerializerFactory::getJsonSerializer()->serialize([
-                self::STATUS_KEY => $status,
-                self::MESSAGE_KEY => $message,
-                self::PAYLOAD_KEY => $payload
-            ], 'json'));
+        return JsonResponse::create([
+            self::STATUS_KEY => $status,
+            self::MESSAGE_KEY => $message,
+            self::PAYLOAD_KEY => Serializer::serializePayload($payload)
+        ], $status, $headers);
     }
     
     public static function createSuccessResponse(

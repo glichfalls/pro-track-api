@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Repository\TimeRecordRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\ParameterBag;
-use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\GreaterThan;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Positive;
@@ -154,6 +153,18 @@ class TimeRecord implements EntityInterface, Validatable
                 'value' => 1
             ])
         ]);
+    }
+    
+    public function toArray() : array
+    {
+        return [
+            'id' => $this->getId(),
+            'task' => $this->getTask()->getId(),
+            'user' => $this->getUser()->getId(),
+            'description' => $this->getDescription(),
+            'date' => $this->getDate()->format('d.m.Y'),
+            'time' => $this->getTime()
+        ];
     }
     
 }

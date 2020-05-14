@@ -187,4 +187,16 @@ class Project implements EntityInterface, Validatable
         ]);
     }
     
+    public function toArray() : array
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'description' => $this->getDescription(),
+            'status' => $this->getStatus(),
+            'tasks' => $this->getTasks()->map(fn(Task $task) => $task->toArray())->toArray(),
+            'users' => $this->getUsers()->map(fn(User $user) => $user->toArray())->toArray(),
+        ];
+    }
+    
 }

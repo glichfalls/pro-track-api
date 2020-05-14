@@ -14,4 +14,6 @@ interface EntityInterface
     
     public function applyRequestValues(ParameterBag $input) : EntityInterface;
     
+    public function toArray() : array;
+    
 }

@@ -233,4 +233,16 @@ class Task implements EntityInterface, Validatable
         ]);
     }
     
+    public function toArray() : array
+    {
+        return [
+            'id' => $this->getId(),
+            'description' => $this->getDescription(),
+            'guide_time' => $this->getGuideTime(),
+            'status' => $this->getStatus(),
+            'users' => $this->getUsers()->map(fn(User $user) => $user->toArray())->toArray(),
+            'records' => $this->getTimeRecords()->map(fn(TimeRecord $record) => $record->toArray())->toArray()
+        ];
+    }
+    
 }

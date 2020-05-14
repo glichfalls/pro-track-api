@@ -59,7 +59,7 @@ class TaskService extends AbstractService
                 'Es wurde kein Projekt ausgewählt. Das Arbeitspaket kann nicht erstellt werden.'
             );
         }
-        if($project->getTasks()->exists(fn(Task $cmp) => strcmp($cmp->getTitle(), $task->getTitle()))) {
+        if($project->getTasks()->exists(fn(int $key, Task $cmp) => $cmp->getTitle() === $task->getTitle())) {
             throw new ConflictException(sprintf(
                 'Es existiert bereits ein Arbeitspaket mit dem Namen %s.',
                 $task->getTitle()
