@@ -36,6 +36,7 @@ class TaskController extends BaseController
     {
         try {
             $task = $service->createTaskFromRequest($id, $projectService, $request);
+            $task->getUsers()->add($this->getAuthenticatedUser($request));
         } catch(HTTPException $exception) {
             return $exception->getJsonResponse();
         }

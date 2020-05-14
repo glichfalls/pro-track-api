@@ -20,7 +20,6 @@
         "symfony/framework-bundle": "5.0.*",
         "symfony/orm-pack": "^1.0",
         "symfony/property-access": "5.0.*",
-        "symfony/serializer": "5.0.*",
         "symfony/validator": "5.0.*",
         "symfony/yaml": "5.0.*"
     },

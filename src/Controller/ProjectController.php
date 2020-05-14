@@ -33,6 +33,7 @@ class ProjectController extends BaseController
     {
         try {
             $project = $service->createProjectFromRequest($request);
+            $project->getUsers()->add($this->getAuthenticatedUser($request));
         } catch(HTTPException $exception) {
             return $exception->getJsonResponse();
         }

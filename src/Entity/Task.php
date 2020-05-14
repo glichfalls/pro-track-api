@@ -237,6 +237,7 @@ class Task implements EntityInterface, Validatable
     {
         return [
             'id' => $this->getId(),
+            'title' => $this->getTitle(),
             'description' => $this->getDescription(),
             'guide_time' => $this->getGuideTime(),
             'status' => $this->getStatus(),
