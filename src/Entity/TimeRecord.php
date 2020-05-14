@@ -160,7 +160,7 @@ class TimeRecord implements EntityInterface, Validatable
         return [
             'id' => $this->getId(),
             'task' => $this->getTask()->getId(),
-            'user' => $this->getUser()->getId(),
+            'user' => $this->getUser()->toArray(),
             'description' => $this->getDescription(),
             'date' => $this->getDate()->format('d.m.Y'),
             'time' => $this->getTime()
