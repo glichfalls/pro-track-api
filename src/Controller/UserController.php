@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 
+use App\Entity\User;
 use App\Exceptions\HTTPException;
 use App\Exceptions\UnauthorizedException;
 use App\Factory\ResponseFactory;
@@ -21,7 +22,22 @@ class UserController extends BaseController
             return $exception->getJsonResponse();
         }
     }
-    
+
+    public function getUsers() : Response
+    {
+        $users = $this->getDoctrine()->getRepository(User::class)->findAll();
+        return ResponseFactory::createSuccessResponse('', $users);
+    }
+
+    public function getUserById(int $id) : Response
+    {
+        $user = $this->getDoctrine()->getRepository(User::class)->find($id);
+        if(!$user) {
+            return ResponseFactory::createJsonResponse(404, sprintf('Der Benutzer %s existiert nicht.', $id));
+        }
+        return ResponseFactory::createSuccessResponse('', $user);
+    }
+
     public function createUser(Request $request) : Response
     {
         try {
