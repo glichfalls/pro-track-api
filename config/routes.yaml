@@ -23,6 +23,11 @@ change_project_status:
     controller: App\Controller\ProjectController:changeProjectStatus
     methods: PATCH|HEAD
 
+add_project_user:
+    path: /api/v1/project/{project_id}/user/{user_id}
+    controller: App\Controlller\ProjectController:addUser
+    methods: POST|HEAD
+
 delete_project:
     path: /api/v1/project/{id}
     controller: App\Controller\ProjectController::deleteProject
