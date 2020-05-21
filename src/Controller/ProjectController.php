@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Project;
+use App\Entity\User;
 use App\Exceptions\HTTPException;
 use App\Factory\ResponseFactory;
 use App\Service\ProjectService;
@@ -43,6 +44,29 @@ class ProjectController extends BaseController
         return ResponseFactory::createSuccessResponse(
             sprintf('Das Projekt %s wurde erstellt.', $project->getName()),
             $project
+        );
+    }
+    
+    public function addUserToProject(Request $request, int $project_id, int $user_id) : Response
+    {
+        $project = $this->getDoctrine()->getRepository(Project::class)
+            ->find($project_id);
+        if(!$project) {
+            return ResponseFactory::createJsonResponse(404, sprintf('Es existiert kein Projekt mit der ID %s', $project_id));
+        }
+        $user = $this->getDoctrine()->getRepository(User::class)
+            ->find($user_id);
+        if(!$user) {
+            return ResponseFactory::createJsonResponse(404, sprintf('Es existiert kein Benutzer mit der ID %s', $user_id));
+        }
+        $project->getUsers()->add($user);
+        $this->getDoctrine()->getManager()->flush();
+        return ResponseFactory::createSuccessResponse(
+            sprintf(
+                'Der Benutzer `%s` wurde zum Projekt `%s` hinzugefügt.',
+                $user->getName(),
+                $project->getName()
+            )
         );
     }
     

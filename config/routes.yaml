@@ -30,7 +30,7 @@ change_project_status:
 
 add_project_user:
     path: /api/v1/project/{project_id}/user/{user_id}
-    controller: App\Controlller\ProjectController:addUser
+    controller: App\Controller\ProjectController:addUserToProject
     methods: POST
 
 delete_project:
@@ -57,6 +57,11 @@ update_task:
     path: /api/v1/task/{id}
     controller: App\Controller\TaskController:updateTask
     methods: PUT
+
+change_task_status:
+    path: /api/v1/task/{id}/status
+    controller: App\Controller\TaskController:changeTaskStatus
+    methods: PATCH
 
 delete_task:
     path: /api/v1/task/{id}

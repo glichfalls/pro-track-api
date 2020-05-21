@@ -67,8 +67,8 @@ class Project implements EntityInterface, Validatable
     
     public function applyRequestValues(ParameterBag $input) : Project
     {
-        $this->setName($input->get('name'));
-        $this->setDescription($input->get('description'));
+        $this->setName($input->get('name', ''));
+        $this->setDescription($input->get('description', ''));
         return $this;
     }
     

@@ -62,15 +62,9 @@ class TimeRecord implements EntityInterface, Validatable
     
     public function applyRequestValues(ParameterBag $input) : TimeRecord
     {
-        if($input->has('description')) {
-            $this->setDescription((string) $input->get('description'));
-        }
-        if($input->has('date')) {
-            $this->setDate(\DateTime::createFromFormat('d.m.Y', $input->get('date')));
-        }
-        if($input->has('time')) {
-            $this->setTime((string) $input->get('time'));
-        }
+        $this->setDescription((string) $input->get('description'));
+        $this->setDate(\DateTime::createFromFormat('d.m.Y', $input->get('date', '01.01.1970')));
+        $this->setTime((string) $input->get('time', ''));
         return $this;
     }
     

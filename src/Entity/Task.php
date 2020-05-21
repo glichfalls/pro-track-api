@@ -45,7 +45,7 @@ class Task implements EntityInterface, Validatable
 
     /**
      * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="tasks")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $project;
 
@@ -79,9 +79,9 @@ class Task implements EntityInterface, Validatable
     
     public function applyRequestValues(ParameterBag $input) : Task
     {
-        $this->setTitle($input->get('title'));
-        $this->setDescription($input->get('description'));
-        $this->setGuideTime($input->get('guide_time'));
+        $this->setTitle($input->get('title', ''));
+        $this->setDescription($input->get('description', ''));
+        $this->setGuideTime($input->get('guide_time', ''));
         return $this;
     }
     
@@ -227,7 +227,7 @@ class Task implements EntityInterface, Validatable
                 'message' => 'Die Richtzeit darf nicht leer sein.'
             ]),
             new GreaterThan([
-                'value' => 1,
+                'value' => 0,
                 'message' => 'Die Richtzeit muss grösser als 0 sein.'
             ])
         ]);
