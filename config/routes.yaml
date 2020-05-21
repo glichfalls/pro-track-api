@@ -1,99 +1,104 @@
+home:
+    path: /
+    controller: App\Controller\MainController:home
+    methods: GET
+
 get_projects:
     path: /api/v1/projects
     controller: App\Controller\ProjectController::getProjects
-    methods: GET|HEAD
+    methods: GET
 
 get_project_by_id:
     path: /api/v1/project/{id}
     controller: App\Controller\ProjectController::getProjectById
-    methods: GET|HEAD
+    methods: GET
 
 create_project:
     path: /api/v1/projects
     controller: App\Controller\ProjectController:createProject
-    methods: POST|HEAD
+    methods: POST
 
 update_project:
     path: /api/v1/project/{id}
     controller: App\Controller\ProjectController::updateProject
-    methods: PUT|HEAD
+    methods: PUT
 
 change_project_status:
     path: /api/v1/project/{id}/status
     controller: App\Controller\ProjectController:changeProjectStatus
-    methods: PATCH|HEAD
+    methods: PATCH
 
 add_project_user:
     path: /api/v1/project/{project_id}/user/{user_id}
     controller: App\Controlller\ProjectController:addUser
-    methods: POST|HEAD
+    methods: POST
 
 delete_project:
     path: /api/v1/project/{id}
     controller: App\Controller\ProjectController::deleteProject
-    methods: DELETE|HEAD
+    methods: DELETE
 
 get_tasks:
     path: /api/v1/tasks
     controller: App\Controller\TaskController:getTasks
-    methods: GET|HEAD
+    methods: GET
 
 get_task_by_id:
     path: /api/v1/task/{id}
     controller: App\Controller\TaskController:getTaskById
-    methods: GET|HEAD
+    methods: GET
 
 create_task:
     path: /api/v1/project/{id}/tasks
     controller: App\Controller\TaskController:createTask
-    methods: POST|HEAD
+    methods: POST
 
 update_task:
     path: /api/v1/task/{id}
     controller: App\Controller\TaskController:updateTask
-    methods: PUT|HEAD
+    methods: PUT
 
 delete_task:
     path: /api/v1/task/{id}
     controller: App\Controller\TaskController::deleteTask
-    methods: DELETE|HEAD
+    methods: DELETE
 
 get_record_by_id:
     path: /api/v1/record/{id}
     controller: App\Controller\TimeRecordController::getRecordById
-    methods: GET|HEAD
+    methods: GET
 
 create_time_record:
     path: /api/v1/task/{id}/records
     controller: App\Controller\TimeRecordController:createRecord
-    methods: POST|HEAD
+    methods: POST
 
 update_time_record:
     path: /api/v1/record/{id}
     controller: App\Controller\TimeRecordController::updateRecord
-    methods: PUT|HEAD
+    methods: PUT
 
 delete_time_record:
     path: /api/v1/record/{id}
     controller: App\Controller\TimeRecordController::deleteRecord
-    methods: DELETE|HEAD
+    methods: DELETE
 
 authenticate:
     path: /api/v1/authenticate
     controller: App\Controller\UserController:authenticate
-    methods: POST|HEAD
+    methods: POST
 
 get_users:
     path: /api/v1/users
     controller: App\Controller\UserController::getUsers
-    methods: GET|HEAD
+    methods: GET
 
 get_user_by_id:
     path: /api/v1/user/{id}
     controller: App\Controller\UserController:getUserById
-    methods: GET|HEAD
+    methods: GET
 
 create_user:
     path: /api/v1/users
     controller: App\Controller\UserController:createUser
-    methods: POST|HEAD
+    methods: POST

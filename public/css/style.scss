@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital@0;1&display=swap');
+
+$main-color: #002488;
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  font-family: Roboto, sans-serif;
+  font-weight: 400;
+}
+
+a {
+  color: $main-color;
+  text-decoration: none;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.routes {
+  list-style: none;
+  padding: 0;
+}
+
+.route {
+  display: flex;
+  font-size: 1.25rem;
+  margin: 10px 0;
+
+  .method {
+    min-width: 150px;
+    text-align: center;
+    text-transform: uppercase;
+    padding: 10px 15px;
+    background-color: $main-color;
+    border: 2px solid $main-color;
+    color: #ffffff;
+  }
+  .path {
+    padding: 10px 15px;
+    border: 2px solid $main-color;
+  }
+}

@@ -1,0 +1,28 @@
+<html lang="de">
+<head>
+    <title>ProTrack</title>
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
+</head>
+<body>
+
+    <div class="container">
+
+        <h2>ProTrack API</h2>
+
+        <a target="_blank" href="https://github.com/glichfalls/pro-track-api/">GitHub</a>
+
+        <ul class="routes">
+            {% for route in routes %}
+                {% if route.methods|length > 0 %}
+                    <li class="route">
+                        <div class="method">{{ route.methods|join(' | ') }}</div>
+                        <div class="path">{{ route.path }}</div>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+
+    </div>
+
+</body>
+</html>
