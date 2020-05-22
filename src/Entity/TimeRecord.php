@@ -28,7 +28,7 @@ class TimeRecord implements EntityInterface, Validatable
     private $description;
 
     /**
-     * @ORM\Column(type="bigint")
+     * @ORM\Column(type="integer")
      */
     private $time;
 
@@ -64,7 +64,7 @@ class TimeRecord implements EntityInterface, Validatable
     {
         $this->setDescription((string) $input->get('description'));
         $this->setDate(\DateTime::createFromFormat('d.m.Y', $input->get('date', '01.01.1970')));
-        $this->setTime((string) $input->get('time', ''));
+        $this->setTime((int) $input->get('time', 0));
         return $this;
     }
     
@@ -80,7 +80,7 @@ class TimeRecord implements EntityInterface, Validatable
         return $this;
     }
 
-    public function getTime(): ?string
+    public function getTime(): ?int
     {
         return $this->time;
     }
