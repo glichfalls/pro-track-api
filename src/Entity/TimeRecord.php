@@ -85,7 +85,7 @@ class TimeRecord implements EntityInterface, Validatable
         return $this->time;
     }
 
-    public function setTime(string $time): self
+    public function setTime(int $time): self
     {
         $this->time = $time;
 

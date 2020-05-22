@@ -60,7 +60,7 @@ class Task implements EntityInterface, Validatable
     private $status;
 
     /**
-     * @ORM\Column(type="bigint")
+     * @ORM\Column(type="integer")
      */
     private $guideTime;
 
@@ -81,7 +81,7 @@ class Task implements EntityInterface, Validatable
     {
         $this->setTitle($input->get('title', ''));
         $this->setDescription($input->get('description', ''));
-        $this->setGuideTime($input->get('guide_time', ''));
+        $this->setGuideTime($input->get('guide_time', 0));
         return $this;
     }
     
@@ -197,12 +197,12 @@ class Task implements EntityInterface, Validatable
         return $this;
     }
 
-    public function getGuideTime(): ?string
+    public function getGuideTime(): ?int
     {
         return $this->guideTime;
     }
 
-    public function setGuideTime(string $guideTime): self
+    public function setGuideTime(int $guideTime): self
     {
         $this->guideTime = $guideTime;
 
