@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Task;
+use App\Entity\User;
 use App\Exceptions\HTTPException;
 use App\Factory\ResponseFactory;
 use App\Service\ProjectService;
@@ -46,6 +47,33 @@ class TaskController extends BaseController
         return ResponseFactory::createSuccessResponse(
             sprintf('Das Arbeitspaket %s wurde erstellt.', $task->getTitle()),
             $task
+        );
+    }
+    
+    public function addUserToTask(int $task_id, int $user_id) : Response
+    {
+        $task = $this->getDoctrine()->getRepository(Task::class)->find($task_id);
+        if(!$task) {
+            return ResponseFactory::createJsonResponse(404, sprintf(
+                'Es existiert kein Arbeitspaket mit der ID %s',
+                $task_id
+            ));
+        }
+        $user = $this->getDoctrine()->getRepository(User::class)->find($user_id);
+        if(!$user) {
+            return ResponseFactory::createJsonResponse(404, sprintf(
+                'Es existiert kein Benutzer mit der ID %s',
+                $user_id
+            ));
+        }
+        $user->getTasks()->add($task);
+        $this->getDoctrine()->getManager()->flush();
+        return ResponseFactory::createSuccessResponse(
+            sprintf(
+                'Der Benutzer `%s` wurde zum Arbeitspaket `%s` hinzugefügt.',
+                $user->getName(),
+                $task->getName()
+            )
         );
     }
     

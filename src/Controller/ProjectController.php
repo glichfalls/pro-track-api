@@ -47,7 +47,7 @@ class ProjectController extends BaseController
         );
     }
     
-    public function addUserToProject(Request $request, int $project_id, int $user_id) : Response
+    public function addUserToProject(int $project_id, int $user_id) : Response
     {
         $project = $this->getDoctrine()->getRepository(Project::class)
             ->find($project_id);
@@ -59,7 +59,7 @@ class ProjectController extends BaseController
         if(!$user) {
             return ResponseFactory::createJsonResponse(404, sprintf('Es existiert kein Benutzer mit der ID %s', $user_id));
         }
-        $project->getUsers()->add($user);
+        $user->getProjects()->add($project);
         $this->getDoctrine()->getManager()->flush();
         return ResponseFactory::createSuccessResponse(
             sprintf(
