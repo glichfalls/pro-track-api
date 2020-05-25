@@ -53,6 +53,11 @@ create_task:
     controller: App\Controller\TaskController:createTask
     methods: POST
 
+add_task_user:
+    path: /api/v1/task/{task_id}/user/{user_id}
+    controller: App\Controller\TaskController:addUserToTask
+    methods: POST
+
 update_task:
     path: /api/v1/task/{id}
     controller: App\Controller\TaskController:updateTask
